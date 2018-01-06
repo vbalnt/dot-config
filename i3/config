@@ -2,32 +2,37 @@
 set $mod Mod4
 
 # Font
-#font pango:DejaVu Sans Mono 11
 font xft:Inconsolata 12
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
-# Set startup programs
+# Some startup programs
 exec --no-startup-id nm-applet
 exec --no-startup-id compton --vsync opengl --no-fading-openclose
 exec --no-startup-id xinput set-prop "SynPS/2 Synaptics TouchPad" "Device Enabled" 0
 
 # My keys
 bindsym $mod+o exec --no-startup-id emacsclient -c
-bindsym $mod+Tab exec --no-startup-id ~/.local/bin/quickswitch.py 
+#bindsym $mod+Tab exec --no-startup-id ~/.local/bin/quickswitch.py 
 bindsym $mod+Return exec --no-startup-id urxvt -e /bin/zsh
 bindsym XF86MonBrightnessUp exec --no-startup-id light -A 3
 bindsym XF86MonBrightnessDown exec --no-startup-id light -U 3
 bindsym XF86AudioRaiseVolume exec --no-startup-id amixer -q set Master 2dB+ unmute
 bindsym XF86AudioLowerVolume exec --no-startup-id amixer -q set Master 2dB- unmute
 bindsym XF86AudioMute exec --no-startup-id amixer -D pulse sset Master toggle
-bindsym $mod+i exec --no-startup-id palemoon -app ~/git/conkeror/application.ini
-bindsym XF86Display exec --no-startup-id ~/.local/bin/screens.sh
+#bindsym $mod+i exec --no-startup-id palemoon -app ~/git/conkeror/application.ini
+#bindsym XF86Display exec --no-startup-id ~/.local/bin/screens.sh
 # bindsym XF86LaunchA exec --no-startup-id exec ~/.local/bin/emacs-capture.sh --eval '(org-capture)'
-bindsym --release Print exec scrot -s '%Y-%m-%d_$wx$h.png' -e 'mv $f ~/documents/'
+# Print whole screen to .png
+bindsym --release Print exec scrot '%Y-%m-%d_$wx$h.png' -e 'mv $f ~/documents/'
+# Print selection from screen to .png
+bindsym --release Shift+Print exec scrot -s '%Y-%m-%d_$wx$h.png' -e 'mv $f ~/documents/'
 bindsym $mod+d exec --no-startup-id dmenu_run
 bindsym $mod+t exec --no-startup-id nautilus --no-desktop
+
+# show lightdm screen to switch users 
+bindsym $mod+0xffbe exec --no-startup-id dm-tool switch-to-greeter
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -91,42 +96,22 @@ bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+9 move container to workspace 9
 bindsym $mod+Shift+0 move container to workspace 10
 
-# reload the configuration file
 bindsym $mod+Shift+c reload
-# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
-# exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec --no-startup-id "i3-nagbar -t warning -m 'Exit?' -b 'Yes.' 'i3-msg exit'"
 
-# resize window (you can also use the mouse for that)
+# resize window
 mode "resize" {
-        # These bindings trigger as soon as you enter the resize mode
-
-        # Pressing left will shrink the window’s width.
-        # Pressing right will grow the window’s width.
-        # Pressing up will shrink the window’s height.
-        # Pressing down will grow the window’s height.
-        bindsym j resize shrink width 10 px or 10 ppt
-        bindsym k resize grow height 10 px or 10 ppt
-        bindsym l resize shrink height 10 px or 10 ppt
-        bindsym semicolon resize grow width 10 px or 10 ppt
-
-        # same bindings, but for the arrow keys
-        bindsym Left resize shrink width 10 px or 10 ppt
-        bindsym Down resize grow height 10 px or 10 ppt
-        bindsym Up resize shrink height 10 px or 10 ppt
-        bindsym Right resize grow width 10 px or 10 ppt
-
-        # back to normal: Enter or Escape
+        bindsym Right resize shrink width 5 px or 5 ppt
+        bindsym Down resize grow height 5 px or 5 ppt
+        bindsym Up resize shrink height 5 px or 5 ppt
+        bindsym Left resize grow width 5 px or 5 ppt
         bindsym Return mode "default"
         bindsym Escape mode "default"
 }
-
 bindsym $mod+r mode "resize"
 
-# Start i3bar to display a workspace bar (plus the system information i3status
-# finds out, if available)
+# Bar related stuff
 bar {
-    tray_output eDP-1
     status_command i3status
 }
